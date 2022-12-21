@@ -25,13 +25,13 @@ public class LongMapImpl<V> implements LongMap<V> {
    private void initTable(){
         table = new Node[HASH_TABLE_DIMENSION];
     }
-    private int hash(long key){
+   private int hash(long key){
         return (int)key% table.length;
     }
-    void expandTable(){
+   private void expandTable(){
         ProcessTable(table.length*2);//+HASH_TABLE_DIMENSION);
     }
-    void compressTable(){
+   private void compressTable(){
         if (table.length==HASH_TABLE_DIMENSION)
             return;
         int curLen;
@@ -52,7 +52,7 @@ public class LongMapImpl<V> implements LongMap<V> {
     /**
      * resorts table according new hash
      */
-    void ProcessTable(int newSize){
+   private void ProcessTable(int newSize){
         int curHash;
         Node[] oldTable = table;
         table = new Node[newSize];

@@ -2,6 +2,8 @@ import comparus.test.LongMap;
 import comparus.test.LongMapImpl;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import static org.junit.Assert.*;
@@ -13,7 +15,7 @@ public class TestMap {
 
         LongMap<Integer> lmi = new LongMapImpl<>();
         assertTrue(lmi.isEmpty());
-
+//        Map<Integer,String> mp = new HashMap<>();
         // putting
         for (int i = 0; i < testDimension; i++) {
             assertEquals((int) lmi.put(i, i), i);
