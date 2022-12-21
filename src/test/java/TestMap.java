@@ -2,40 +2,57 @@ import comparus.test.LongMap;
 import comparus.test.LongMapImpl;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
 import static org.junit.Assert.*;
 
 public class TestMap {
-    @Test
-    public void test(){
-        int testDimension = 10000;
-
-        LongMap<Integer> lmi = new LongMapImpl<>();
+    int testDimension = 10000;
+    LongMap<Integer> lmi;
+    void testPutIsEmpty(){
         assertTrue(lmi.isEmpty());
-//        Map<Integer,String> mp = new HashMap<>();
-        // putting
         for (int i = 0; i < testDimension; i++) {
-            assertEquals((int) lmi.put(i, i), i);
+            lmi.put(i, i);
             assertTrue(lmi.containsKey(i));
             assertTrue(lmi.containsValue(i));
         }
         assertFalse(lmi.isEmpty());
         assertEquals(lmi.size(), testDimension);
-        // get and remove
+    }
+    void testContainsKeyValue(){
+        for (int i = 0; i < testDimension; i++) {
+            assertTrue(lmi.containsKey(i));
+            assertTrue(lmi.containsValue(i));
+        }
+    }
+    void testGet(){
         for (int i = 0; i < testDimension; i++) {
             if (lmi.containsKey(i)){
                 assertEquals((int) lmi.get(i), i);
+            }
+        }
+    }
+    void testRemove(){
+        for (int i = 0; i < testDimension; i++) {
+            if (lmi.containsKey(i)){
                 assertEquals((int) lmi.remove(i),i);
             }
             assertFalse(lmi.containsKey(i));
             assertFalse(lmi.containsValue(i));
         }
-        assertEquals(lmi.size(), lmi.keys().length);
-        // put
-        assertEquals(12, (int) lmi.put(2, 12));
+    }
+    void testClear(){
+        lmi.clear();
+        assertEquals(lmi.size(),0);
+    }
+    @Test
+    public void test(){
+
+        lmi = new LongMapImpl<>();
+
+        testPutIsEmpty();
+        testContainsKeyValue();
+        testGet();
+        testRemove();
+        testClear();
 
     }
 }

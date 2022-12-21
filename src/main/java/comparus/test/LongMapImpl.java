@@ -29,7 +29,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         return (int)key% table.length;
     }
    private void expandTable(){
-        ProcessTable(table.length*2);//+HASH_TABLE_DIMENSION);
+       processTable(table.length*2);//+HASH_TABLE_DIMENSION);
     }
    private void compressTable(){
         if (table.length==HASH_TABLE_DIMENSION)
@@ -43,16 +43,16 @@ public class LongMapImpl<V> implements LongMap<V> {
             //            while (curLen - HASH_TABLE_DIMENSION > 0 && (float) curLen / keysNumber > FILL_KOEF_MAX) {
             //                curLen = curLen - HASH_TABLE_DIMENSION;
             //            }
-            while (curLen/2 > HASH_TABLE_DIMENSION && (float) curLen/keysNumber>FILL_KOEF_MAX) {
+            while (curLen > HASH_TABLE_DIMENSION && (float) curLen/keysNumber>FILL_KOEF_MAX) {
                 curLen = curLen /2;
             }
         }
-        ProcessTable(curLen);
+       processTable(curLen);
     }
     /**
      * resorts table according new hash
      */
-   private void ProcessTable(int newSize){
+   private void processTable(int newSize){
         int curHash;
         Node[] oldTable = table;
         table = new Node[newSize];
@@ -82,14 +82,15 @@ public class LongMapImpl<V> implements LongMap<V> {
         Node item = table[currentHash];
         while (item!=null){
             if(item.key==key){
+                V oldValue=(V)item.value;
                 item.value = value;
-                return value;
+                return oldValue;
             }
             item = item.nextItem;
         }
         table[currentHash] = new Node(key, value, table[currentHash]);
         keysNumber++;
-        return value;
+        return null;
     }
     public V get(long key) {
         int currentHash = hash(key);
@@ -204,7 +205,11 @@ public class LongMapImpl<V> implements LongMap<V> {
         table=new Node[HASH_TABLE_DIMENSION];
         keysNumber=0;
     }
+    @Override
     public String toString(){
+        if (table==null){
+            return "";
+        }
         StringBuilder sb = new StringBuilder();
         int k = 0;
         for (int i = 0; i < table.length; i++) {
