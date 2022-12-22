@@ -6,8 +6,19 @@ import static org.junit.Assert.*;
 
 public class TestMap {
     int testDimension = 10000;
-    LongMap<Integer> lmi;
-    void testPutIsEmpty(){
+    LongMap<Integer> lmi = new LongMapImpl<>();
+    void fillMap(){
+        if (lmi.size() == 0){
+            for (int i = 0; i < testDimension; i++) {
+                lmi.put(i, i);
+            }
+        }
+    }
+    @Test
+    public void testPutIsEmpty(){
+        if (lmi.size() != 0){
+            lmi.clear();
+        }
         assertTrue(lmi.isEmpty());
         for (int i = 0; i < testDimension; i++) {
             lmi.put(i, i);
@@ -17,20 +28,26 @@ public class TestMap {
         assertFalse(lmi.isEmpty());
         assertEquals(lmi.size(), testDimension);
     }
-    void testContainsKeyValue(){
+    @Test
+    public void testContainsKeyValue(){
+        fillMap();
         for (int i = 0; i < testDimension; i++) {
             assertTrue(lmi.containsKey(i));
             assertTrue(lmi.containsValue(i));
         }
     }
-    void testGet(){
+    @Test
+    public void testGet(){
+        fillMap();
         for (int i = 0; i < testDimension; i++) {
             if (lmi.containsKey(i)){
                 assertEquals((int) lmi.get(i), i);
             }
         }
     }
-    void testRemove(){
+    @Test
+    public void testRemove(){
+        fillMap();
         for (int i = 0; i < testDimension; i++) {
             if (lmi.containsKey(i)){
                 assertEquals((int) lmi.remove(i),i);
@@ -39,20 +56,9 @@ public class TestMap {
             assertFalse(lmi.containsValue(i));
         }
     }
-    void testClear(){
+    @Test
+    public void testClear(){
         lmi.clear();
         assertEquals(lmi.size(),0);
-    }
-    @Test
-    public void test(){
-
-        lmi = new LongMapImpl<>();
-
-        testPutIsEmpty();
-        testContainsKeyValue();
-        testGet();
-        testRemove();
-        testClear();
-
     }
 }
