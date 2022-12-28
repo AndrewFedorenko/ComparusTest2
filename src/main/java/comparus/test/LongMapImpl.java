@@ -22,16 +22,16 @@ public class LongMapImpl<V> implements LongMap<V> {
     }
     public LongMapImpl(){
     }
-   private void initTable(){
+    private void initTable(){
         table = new Node[HASH_TABLE_DIMENSION];
     }
-   private int hash(long key){
+    private int hash(long key){
         return (int)key% table.length;
     }
-   private void expandTable(){
-       processTable(table.length*2);//+HASH_TABLE_DIMENSION);
+    private void expandTable(){
+        processTable(table.length*2);
     }
-   private void compressTable(){
+    private void compressTable(){
         if (table.length == HASH_TABLE_DIMENSION)
             return;
         int curLen;
@@ -40,19 +40,16 @@ public class LongMapImpl<V> implements LongMap<V> {
             return;
         } else {
             curLen = table.length;
-            //            while (curLen - HASH_TABLE_DIMENSION > 0 && (float) curLen / keysNumber > FILL_KOEF_MAX) {
-            //                curLen = curLen - HASH_TABLE_DIMENSION;
-            //            }
             while (curLen > HASH_TABLE_DIMENSION && (float) curLen/keysNumber>FILL_KOEF_MAX) {
                 curLen = curLen /2;
             }
         }
-       processTable(curLen);
+        processTable(curLen);
     }
     /**
      * resorts table according new hash
      */
-   private void processTable(int newSize){
+    private void processTable(int newSize){
         int curHash;
         Node[] oldTable = table;
         table = new Node[newSize];
@@ -73,7 +70,7 @@ public class LongMapImpl<V> implements LongMap<V> {
     public V put(long key, V value) {
         if (table == null){
             initTable();
-            } else {
+        } else {
             if(keysNumber != 0&&(float)table.length/keysNumber<FILL_KOEF_MIN){
                 expandTable();
             }
@@ -93,9 +90,9 @@ public class LongMapImpl<V> implements LongMap<V> {
         return null;
     }
     public V get(long key) {
-        int currentHash = hash(key);
-        if(table == null||currentHash>table.length)
+        if(table == null)
             return null;
+        int currentHash = hash(key);
         Node item = table[currentHash];
         while (item != null){
             if(item.key == key){
@@ -112,9 +109,9 @@ public class LongMapImpl<V> implements LongMap<V> {
      * if found - remove, else return null
      */
     public V remove(long key) {
-        int currentHash = hash(key);
-        if(table == null||currentHash>table.length)
+        if(table == null)
             return null;
+        int currentHash = hash(key);
         Node item = table[currentHash];
         Node prevItem = null;
         while (item != null){
@@ -144,7 +141,7 @@ public class LongMapImpl<V> implements LongMap<V> {
             return false;
         }
         int currentHash = hash(key);
-        if(table == null||currentHash>table.length||table[currentHash] == null)
+        if(table == null||table[currentHash] == null)
             return false;
         Node item = table[currentHash];
         while (item != null) {
@@ -162,7 +159,7 @@ public class LongMapImpl<V> implements LongMap<V> {
             if (table[i] != null) {
                 Node item = table[i];
                 while (item != null) {
-                    if (item.value.equals(value))
+                    if (item.value == null && value == null || item.value != null && item.value.equals(value))
                         return true;
                     item = item.nextItem;
                 }
@@ -226,7 +223,9 @@ public class LongMapImpl<V> implements LongMap<V> {
             if (table[i] != null) {
                 Node item = table[i];
                 while (item != null) {
-                    sb.append("["+item.key+"->"+item.value.toString()+"]");
+                    sb.append("[" + item.key + "->" +
+                            (item.value == null ? "null" : item.value.toString()) +
+                            "]");
                     item = item.nextItem;
                     k++;
                 }

@@ -31,6 +31,7 @@ public class TestMap {
     @Test
     public void testContainsKeyValue(){
         fillMap();
+        lmi.put(testDimension, null);
         for (int i = 0; i < testDimension; i++) {
             assertTrue(lmi.containsKey(i));
             assertTrue(lmi.containsValue(i));
